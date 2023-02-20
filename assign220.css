@@ -1,0 +1,36 @@
+
+@media(min-width:0px) and (max-width:680px) {
+    .wrapper {
+        text-align: center;
+        background-color: purple;
+        gap: 1rem;
+    }}
+
+.wrapper {
+    background-color: purple;
+    color: aqua;
+    text-align: center;
+    gap: 1rem;
+    border: 1px;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.button {
+    background-color: springgreen;
+    cursor: pointer;
+}
+
+.input {
+    background-color: white;
+}
+
+body {
+    background-color: black;
+    width: 100%;
+}
+
+ul {
+    list-style: none;
+}
