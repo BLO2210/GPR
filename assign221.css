@@ -1,0 +1,16 @@
+.dishpic {
+    width: 50vw;
+    height: 50vh;
+    height: auto;
+}
+
+@media (min-width:0px) and (max-width:680px) {
+    .dishpic {
+        display: flex;
+        width: 100vw;
+    }
+}
+
+li {
+    list-style:none
+}
