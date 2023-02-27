@@ -1,0 +1,83 @@
+/* .movieRoster {
+    display: flex;
+} */
+
+body {
+    background-color: #121212;
+    color: #fff;
+  }
+  
+  #movieRoster {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+  
+  #movieCard {
+    margin: 20px;
+    background-color: #1f1f1f;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  #movieCard:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.7);
+  }
+  
+  #poster {
+    width: 100%;
+    height: auto;
+  }
+  
+  #Title {
+    margin: 10px;
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  
+  #preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .bigCard {
+    display: flex;
+    justify-content: space-around;
+    background-color: #1f1f1f;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .bigTitle {
+    font-size: 3rem;
+    color: #fff;
+  }
+  
+  .bigPoster {
+    width: 300px;
+    height: 450px;
+    margin-right: 20px;
+    border-radius: 10px;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #fff;
+  }
+  
+  .info p {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  
