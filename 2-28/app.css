@@ -1,0 +1,38 @@
+body {
+    background-color: #1a1a1a;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+  
+  section {
+    align-items: center;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="number"] {
+    background-color: #404040;
+    color: #fff;
+  }
+  
+  button {
+    background-color: #4d4d4d;
+    color: #fff;
+  }
+  
+  button:hover {
+    background-color: #808080;
+  }
+  
+  #emailSearchTextBox,
+  #emailDeleteTextBox {
+    margin-left: 10px;
+    margin-bottom: 20px;
+  }
+  
+  #emailView,
+  #coffeeView {
+    background-color: #262626;
+  }
+  
+  
