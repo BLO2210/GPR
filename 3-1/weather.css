@@ -1,0 +1,34 @@
+/* Style for the weather slot */
+#weatherSlot {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    list-style:square;
+  }
+  
+  /* Style for the city input and submit button */
+  #cityInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+  
+  #citySubmit {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  #citySubmit:hover {
+    background-color: #3e8e41;
+  }
+  
