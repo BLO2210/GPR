@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+  </head>
+  <body>
+
+    <a href="http://localhost:8080/addTrip">Click here to add trip</a>
+     {{#tripsObj}}
+    <form method="POST" action="/deleteTrip">
+    <section>
+    <b>{{title}}</b>
+    <img src="{{image}}"/>
+    {{departure}}
+    {{arrive}}
+    <input type="hidden" value={{tripID}} name="tripID"/>
+    <button type = "submit">Delete Trip</button>
+    </section>
+    </form>
+    {{/tripsObj}}
+
+  </body>
+</html>
