@@ -7,13 +7,27 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <section>
+    <h1>LOG IN<h1>
     <form action = "/login" method = "POST">
     <input type="text" placeholder = "username" name="username">
     <input type="password" placeholder = "username" name="password">
     <button>Log in</button>
+    <br>
+    {{errorMessage}}
     </form>
+    </section>
 
+    <section>
+    <h1>REGISTER<h1>
+    <form action = "/register" method = "POST">
+    <input type = "text" placeholder = "username" name = "username">
+    <input type = "password" placeholder = "password" name = "password">
+    <button> Log in</button>
+    <br>
+    {{errorMessage}}
+    </form>
+    </section>
 
 </body>
 </html>

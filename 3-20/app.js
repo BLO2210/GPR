@@ -8,6 +8,7 @@ const path = require('node:path');
 const pgp = require('pg-promise')()
 const connectionString = 'postgres://fwgbxukm:giNbM72gSNSDbDHMsqBGNeKAVkIAcH9M@ruby.db.elephantsql.com/fwgbxukm'
 const db = pgp(connectionString)
+const bcrypt = require('bcryptjs')
 const session = require('express-session')
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'mustache');
@@ -27,12 +28,40 @@ app.get('/', (req,res) => {
 app.get('/index', (req, res) => {
     res.render('index')
 })
+
 app.get('/login', (req, res) => {
     res.render('login')
 })
 
-app.post('/login', (req, res) => {
-    res.redirect('index')
+app.post('/login', async (req, res) => {
+    const username = req.body.username
+    const password = req.body.password
+
+    let user = await db.oneOrNone('SELECT id, username, password from users WHERE username = $1', [username])
+    if(user) {
+        const result = await bcrypt.compare(password, user.password)
+        if(result) {
+            if(req.session) {
+                req.session.userid = user.id
+            }
+            res.redirect('blog')
+        } else {
+            res.render('login', {errorMessage: 'Invalid Login.'})
+        }
+    } else {
+        res.render('login', {errorMessage: 'Invalid Login'})
+    }
+})
+
+app.post('/register', async (req, res) => {
+    const username = req.body.username
+    const password = req.body.password 
+
+    let salt = await bcrypt.genSalt(10)
+    let hashedPassword = await bcrypt.hash(password, salt)
+
+    await db.none('INSERT INTO users(username, password) VALUES($1,$2)', [username, hashedPassword])
+    res.redirect('login')
 })
 
 app.get('/blog', async (req, res) => {

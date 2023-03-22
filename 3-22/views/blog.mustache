@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+
+    <section>
+    <form method = "POST" action = "/add">
+    <h1>Add a Post</h1>
+    <input type="text" placeholder = "Enter title" name = "title">
+    <input type="text" placeholder = "Enter Body" name= "body">
+    <select name = "category">
+    <option value = "Javascript">Javascript</option>
+    <option value = "Python">Python</option>
+    <option value  = "ios">ios</option>
+    <option value = "Android">Android</option>
+    </select>
+    <button type = "submit">Submit</button>
+    </form>
+    </section>
+    <br>
+
+
+    <form action = "/filter" method = "POST">
+        <button>Filter Posts by Category</button>
+        <select name = "category">
+        <option value = "Javascript">Javascript</option>
+        <option value = "Python">Python</option>
+        <option value  = "ios">ios</option>
+        <option value = "Android">Android</option>
+        </select>
+    </form>
+
+    <section>
+    {{#posts}}
+    <form method = "POST" action = "/delete">
+    {{title}}
+    {{body}}
+    {{category}}
+    <input type = "hidden" name = "id" value = {{id}}>
+    <button type = "submit">DELETE</button>
+    </form>
+    {{/posts}}
+    </section>
+</body>
+</html>
