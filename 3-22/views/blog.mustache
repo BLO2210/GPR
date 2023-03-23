@@ -45,7 +45,28 @@
     <input type = "hidden" name = "id" value = {{id}}>
     <button type = "submit">DELETE</button>
     </form>
+
+
+    <form action = "/add-comment" method = "POST">
+    <div>Your thoughts?</div>
+    <input type = "text" placeholder = "title" name = "commentTitle">
+    <input type = "text" placeholder = "body" name = "commentBody">
+    <input type = "hidden" name = "post_id" value = {{id}}>
+    <button type = "submit">Add Comment</button>
+    </form>
+    <div>------------------------------------------------------------</div>
+    {{#comments}}
+    <form action = "/delete-comment" method = "POST">
+    <section>
+    {{title}} - {{body}}
+      <input type = "hidden" name = "commentId" value = {{id}}>
+    <button type = "submit">Delete</button>
+    </form>
+     <div>------------------------------------------------------------</div>
+    {{/comments}}
+    </section>
     {{/posts}}
+    
     </section>
 </body>
 </html>

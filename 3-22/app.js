@@ -12,7 +12,7 @@ const port = 8080
 
 app.use(session({
     secret: "secreto",
-    saveUninitialized:false
+    saveUninitialized: false
 }))
 
 
@@ -20,16 +20,23 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-app.get('/blog', async(req, res) => {
-    const posts = await models.Post.findAll({})
-    res.render('blog', {posts:posts})
+app.get('/blog', async (req, res) => {
+    const posts = await models.Post.findAll({
+        include: [
+            {
+                model:models.Comment,
+                as: 'comments'
+            }
+        ]
+    })
+    res.render('blog', { posts: posts })
 })
 
 
 app.post('/add', async (req, res) => {
     const title = req.body.title
-    const body = req.body.body 
-    const category = req.body.category 
+    const body = req.body.body
+    const category = req.body.category
 
     const newPost = await models.Post.build({
         title: title,
@@ -40,12 +47,44 @@ app.post('/add', async (req, res) => {
     res.redirect('/blog')
 })
 
+app.post('/add-comment', async (req, res) => {
+    const commentTitle = req.body.commentTitle
+    const commentBody = req.body.commentBody
+    const post_id = parseInt(req.body.post_id)
+
+    const comment = models.Comment.build({
+        title: commentTitle,
+        body: commentBody,
+        post_id: post_id
+    })
+    await comment.save()
+    res.redirect('/blog')
+})
+
+app.post("/delete-comment", async (req, res) => {
+    const id = parseInt(req.body.commentId)
+    const deletedComment = await models.Comment.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.redirect('/blog')
+})
+
 app.post('/delete', async (req, res) => {
+    
+    await models.Comment.destroy({
+        where: {
+            id: parseInt(req.body.id)
+        }
+    })
+
     await models.Post.destroy({
         where: {
             id: parseInt(req.body.id)
         }
     })
+   
     res.redirect('/blog')
 })
 
@@ -56,7 +95,7 @@ app.post('/filter', async (req, res) => {
         }
     })
     let filteredArr = []
-    for(let i = 0; i < filteredPosts.length; i++) {
+    for (let i = 0; i < filteredPosts.length; i++) {
         const postInfo = {
             id: filteredPosts[i].dataValues.id,
             title: filteredPosts[i].dataValues.title,
@@ -64,9 +103,9 @@ app.post('/filter', async (req, res) => {
         }
         filteredArr.push(postInfo)
     }
-    res.render('blog', {posts: filteredArr})
+    res.render('blog', { posts: filteredArr })
 })
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-  })
+})
