@@ -8,6 +8,9 @@
 </head>
 <body>
  
+    <form action = "/chat" metod = "GET">
+    <button>GOT SOMETHIN' TO SAY? JOIN CHAT!</button>
+    </form>
 
     <section>
     <form method = "POST" action = "/add">
@@ -34,6 +37,20 @@
         <option value  = "ios">ios</option>
         <option value = "Android">Android</option>
         </select>
+    </form>
+    
+    <form action = "filterDate" method = "POST">
+    <button>Sort by Date</button>
+    <select name = "filterDate">
+    <option value = "recent">Most Recent</option>
+    <option value = "oldest">Oldest</option>
+    </select>
+    </form>
+
+
+    <form method = "POST" action = "/search">
+    <input type = "text" placeholder = "Search" name ="searchBar">
+    <button>Search!</button>
     </form>
 
     <section>

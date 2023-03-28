@@ -1,23 +1,51 @@
 const express = require('express')
-app = express()
+const app = express()
 const mustacheExpress = require('mustache-express')
 const session = require('express-session')
 const bcrypt = require('bcryptjs')
 const models = require('./models')
+
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+
+app.use(express.static('js'))
+
 app.engine("mustache", mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
+
 app.use(express.urlencoded())
-const port = 8080
+require('dotenv').config()
+const { Op } = require('sequelize');
+
+
 
 app.use(session({
-    secret: "secreto",
+    secret: process.env.secret,
     saveUninitialized: false
 }))
 
+let chatMessages = []
+
+// socket connection is made
+io.on('connection', (socket) => {
+    console.log('User connected')
+    io.emit('General-Joined', chatMessages)
+
+    // listening for general channel
+    socket.on('General', chat => {
+        chatMessages.push(chat)
+        io.emit('General', chat)
+    })
+
+})
 
 app.get('/', (req, res) => {
     res.render('index')
+})
+
+app.get('/chat', (req, res) => {
+    res.sendFile(__dirname + '/js/chat.html')
 })
 
 app.get('/blog', async (req, res) => {
@@ -88,6 +116,22 @@ app.post('/delete', async (req, res) => {
     res.redirect('/blog')
 })
 
+
+app.post('/search', async (req, res) => {
+    const query = req.body.searchBar;
+    const posts = await models.Post.findAll({
+        where: {
+            [Op.or]: [
+                {title: {[Op.iLike]: `%${query}%`}},
+                {body: {[Op.iLike]: `%${query}%`}}
+            ]
+        },
+        include: [{model: models.Comment, as: 'comments'}]
+    });
+    res.render('blog', {posts}); 
+})
+
+
 app.post('/filter', async (req, res) => {
     const filteredPosts = await models.Post.findAll({
         where: {
@@ -106,6 +150,36 @@ app.post('/filter', async (req, res) => {
     res.render('blog', { posts: filteredArr })
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+app.post("/filterDate", async (req, res) => {
+    if (req.body.filterDate === "recent") {
+      const posts = await models.Post.findAll({
+        include: {
+          model: models.Comment,
+          as: "comments",
+        },
+        order: [["createdAt", "DESC"]],
+      });
+      res.render("blog", {
+        posts: posts,
+        user: req.session.user,
+      });
+    }
+  
+    if (req.body.filterDate === "oldest") {
+      const posts = await models.Post.findAll({
+        include: {
+          model: models.Comment,
+          as: "comments",
+        },
+        order: [["createdAt", "ASC"]],
+      });
+      res.render("blog", {
+        posts: posts,
+        user: req.session.user,
+      });
+    }
+  });
+  
+http.listen(process.env.port, () => {
+    console.log(`Example app listening on port ${process.env.port}`)
 })
