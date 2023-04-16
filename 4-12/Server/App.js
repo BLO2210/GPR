@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 app.use(express.json())
 app.use(cors())
 
+const User = require('./schemas/user')
 const Book = require('./schemas/book')
 
 mongoose.connect('mongodb+srv://brandonmichael2210:AoRHZwzwnlbO8elU@cluster0.vjcq3iv.mongodb.net/?retryWrites=true&w=majority')
@@ -12,6 +13,40 @@ mongoose.connect('mongodb+srv://brandonmichael2210:AoRHZwzwnlbO8elU@cluster0.vjc
     console.log('DB connected')
 }).catch((error) => {
     console.log(error)
+})
+
+
+app.post('/register', async (req, res) => {
+    const username = req.body.username
+    const password = req.body.password
+
+    const user = new User({
+        username: username,
+        password: password
+    })
+
+    try {
+        await user.save()
+        res.status(200).json({ message: 'Registration successful' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: 'Internal server error' })
+    }
+})
+
+
+app.post('/login', async (req, res) => {
+    const username = req.body.username
+    const password = req.body.password
+    
+    let user = await User.findOne({username: username});
+    if (result) {
+        if (req.session) {
+            req.session.username = username;
+            req.session.userid = user._id;
+        }
+        res.cookie("currentUser", username);
+    }
 })
 
 app.post('/api/add-book', async (req, res) => {
