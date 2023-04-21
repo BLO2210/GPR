@@ -1,17 +1,23 @@
 import './App.css'
 import Counter from "../components/Counter"
 import AddSub from "../components/AddSub"
+import { connect } from "react-redux";
 
-function App() {
+function App(props) {
 
   return (
     <>
+    <h1>{props.counterValue}</h1>
     <Counter/>
     <AddSub />
     </>
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    counterValue: state.counter
+  }
+}
 
-
-export default App
+export default connect(mapStateToProps)(App)
