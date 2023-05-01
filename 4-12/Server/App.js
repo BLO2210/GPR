@@ -2,11 +2,21 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+
 app.use(express.json())
 app.use(cors())
 
+const authenticate = require('./middlewares/authMiddleware')
+
+//for example
+
+
+//end of example
 const User = require('./schemas/user')
 const Book = require('./schemas/book')
+const { JsonWebTokenError } = require('jsonwebtoken')
 
 mongoose.connect('mongodb+srv://brandonmichael2210:AoRHZwzwnlbO8elU@cluster0.vjcq3iv.mongodb.net/?retryWrites=true&w=majority')
 .then(() => {
@@ -16,38 +26,52 @@ mongoose.connect('mongodb+srv://brandonmichael2210:AoRHZwzwnlbO8elU@cluster0.vjc
 })
 
 
-app.post('/register', async (req, res) => {
-    const username = req.body.username
-    const password = req.body.password
+// app.post('/register', async (req, res) => {
+//     const username = req.body.username
+//     const password = req.body.password
 
-    const user = new User({
-        username: username,
-        password: password
+//     const user = new User({
+//         username: username,
+//         password: password
+//     })
+
+//     try {
+//         await user.save()
+//         res.status(200).json({ message: 'Registration successful' })
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({ message: 'Internal server error' })
+//     }
+// })
+
+//functional server side login!
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body
+
+  User.findOne({ username })
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({ success: false, message: 'Incorrect username or password' })
+      }
+
+      bcrypt.compare(password, user.password)
+        .then(result => {
+          if (!result) {
+            return res.status(401).json({ success: false, message: 'Incorrect username or password' })
+          }
+
+          const token = jwt.sign({ username }, 'SECRETKEY')
+          res.json({ success: true, token })
+        })
+        .catch(err => {
+          return res.status(500).json({ success: false, message: 'Internal server error' })
+        })
     })
-
-    try {
-        await user.save()
-        res.status(200).json({ message: 'Registration successful' })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Internal server error' })
-    }
+    .catch(err => {
+      return res.status(500).json({ success: false, message: 'Internal server error' })
+    })
 })
 
-
-app.post('/login', async (req, res) => {
-    const username = req.body.username
-    const password = req.body.password
-    
-    let user = await User.findOne({username: username});
-    if (result) {
-        if (req.session) {
-            req.session.username = username;
-            req.session.userid = user._id;
-        }
-        res.cookie("currentUser", username);
-    }
-})
 
 app.post('/api/add-book', async (req, res) => {
     const bookTitle = req.body.bookTitle
