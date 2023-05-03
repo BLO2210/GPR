@@ -22,7 +22,6 @@ function Books(props) {
                   <button onClick = {() => handleAddToCart(book)}>Add to Cart</button>
                 </div>
               </li>
-        
     })
 
     return (
